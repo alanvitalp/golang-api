@@ -34,7 +34,7 @@ require (
 )
 
 require (
-	github.com/caitlinelfring/go-env-default v1.1.0 // indirect
+	github.com/caitlinelfring/go-env-default v1.1.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/google/uuid v1.3.0
 	github.com/jinzhu/inflection v1.0.0 // indirect

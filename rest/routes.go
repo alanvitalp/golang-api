@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (r rest) create(c *gin.Context){
+func (r rest) create(c *gin.Context) {
 	user := new(model.User)
 	c.BindJSON(user)
 
@@ -16,12 +16,12 @@ func (r rest) create(c *gin.Context){
 }
 
 func (r rest) createWithArray(c *gin.Context) {
-	var users []*model.User
-	c.BindJSON(users)
+	users := make([]*model.User, 0)
+	c.BindJSON(&users)
 
-	user, err := r.service.CreateUsersWithArray(users)
+	users, err := r.service.CreateUsersWithArray(users)
 
-	r.returnDataOrOk(user, err, c)
+	r.returnDataOrOk(users, err, c)
 }
 
 func (r rest) getUserByUsername(c *gin.Context) {
@@ -34,7 +34,7 @@ func (r rest) getUserByUsername(c *gin.Context) {
 
 func (r rest) editUserByUsername(c *gin.Context) {
 	username := c.Param("username")
-	
+
 	newUser := new(model.User)
 	c.BindJSON(newUser)
 

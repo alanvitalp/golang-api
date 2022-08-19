@@ -30,12 +30,12 @@ func NewService(database database.Database) Service {
 }
 
 func (svc *service) CreateUser(user *model.User) (*model.User, error) {
-	if user.Username == "" || 
-	user.Password == "" || 
-	user.Email == "" || 
-	user.FirstName == "" || 
-	user.LastName == "" ||  
-	user.Phone == "" {
+	if user.Username == "" ||
+		user.Password == "" ||
+		user.Email == "" ||
+		user.FirstName == "" ||
+		user.LastName == "" ||
+		user.Phone == "" {
 		return nil, errors.New("invalid user data")
 	}
 
@@ -48,11 +48,12 @@ func (svc *service) CreateUser(user *model.User) (*model.User, error) {
 }
 
 func (svc *service) CreateUsersWithArray(users []*model.User) ([]*model.User, error) {
-	if len(users) == 0 {
-		return nil, errors.New("invalid user data")
-	}
-
 	log.Infof("Creating users with array")
+
+	for _, user := range users {
+		user.ID = uuid.New().String()
+		user.UserStatus = 0
+	}
 
 	return svc.database.CreateUsersWithArray(users)
 }
@@ -66,11 +67,23 @@ func (svc *service) GetUserByUsername(username string) (*model.User, error) {
 func (svc *service) EditUserByUsername(updatedUser *model.User, username string) (*model.User, error) {
 	log.Infof("Editing user %s", username)
 
+	_, err := svc.database.GetUserByUsername(username)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return svc.database.EditUserByUsername(updatedUser, username)
 }
 
 func (svc *service) DeleteUserByUsername(username string) (*model.User, error) {
 	log.Infof("Deleting user %s", username)
+
+	_, err := svc.database.GetUserByUsername(username)
+
+	if err != nil {
+		return nil, err
+	}
 
 	return svc.database.DeleteUserByUsername(username)
 }
